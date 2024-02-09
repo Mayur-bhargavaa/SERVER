@@ -57,6 +57,16 @@ const banner1Schema = new mongoose.Schema({
 
 const Banner1 = mongoose.model('Banner1', banner1Schema);
 
+const SunglassesSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  price: String,
+  image_url: String,
+});
+
+const Sunglasses = mongoose.model('Sunglasses', SunglassesSchema);
+
+
 //                               For Order Schema
 
 const orderSchema = new mongoose.Schema({
@@ -134,6 +144,17 @@ const userSchema = new mongoose.Schema({
    
     },
   }],
+  Scheduling: [{
+    doctor:{
+      type: String,
+    },
+    date:{
+      type: String,
+    },
+    payment_Id:{
+      type: String,
+    },
+  }],
   orders: [orderSchema],
 });
 const User = mongoose.model('User', userSchema);
@@ -149,4 +170,4 @@ const productSchema = new mongoose.Schema({
 });
 const Product = mongoose.model('Product', productSchema);
 
-module.exports = { User, Product, Banner , Banner1, authMiddleware   };
+module.exports = { User, Product, Banner , Banner1, authMiddleware ,Sunglasses  };
