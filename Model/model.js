@@ -165,8 +165,8 @@ const productSchema = new mongoose.Schema({
   title: String,
   description: String,
   imageUrl: String,
-  originalPrice: Number,
-  discountedPrice: Number,
+  originalPrice: String,
+  discountedPrice: String,
 });
 const Product = mongoose.model('Product', productSchema);
 
