@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-const { User, Product, Banner, Banner1} = require("../Model/model");
+const { User, Product, Banner, Banner1,Sunglasses} = require("../Model/model");
 const sendVerificationEmail = require("../Email_verification");
 const router = express.Router();
 const fs = require('fs');
@@ -259,6 +259,29 @@ router.get('/api/products/:id', async (req, res) => {
   }
 });
 
+
+router.get('/api/Sunglasses/:id', async (req, res) => {
+  try {
+    const product = await Sunglasses.findById(req.params.id);
+    if (!product) {
+      return res.status(404).send();
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+router.get('/api/Sunglasses', async (req, res) => {
+  try {
+    const product = await Sunglasses.find();
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //               For Address Update 
 
 router.post("/addresses", async (req, res) => {
@@ -369,6 +392,38 @@ router.delete('/user/addresses/:id', authenticate, async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error',error });
   }
 });
+
+
+// In your backend route handler
+// In your backend route handler
+router.post("/schedule", authenticate, async (req, res) => {
+  try {
+    const { userId, doctor, date, paymentId } = req.body;
+
+    // Check if userId is a non-empty string
+    if (!userId || typeof userId !== "string" || userId.trim() === "") {
+      return res.status(400).json({ message: "Invalid userId provided" });
+    }
+
+    // Find the user by the userId
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Add the new scheduling data to the user's Scheduling array
+    user.Scheduling.push({ doctor, date, paymentId });
+
+    // Save the updated user in the backend
+    await user.save();
+
+    res.status(200).json({ message: "Scheduling data stored successfully" });
+  } catch (error) {
+    console.error("Error storing scheduling data:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //                         FOR IMAGE LOGIC
 
 // router.post('/user/image', authenticate, upload.single('profileImage'), async (req, res) => {
