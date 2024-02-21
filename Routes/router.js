@@ -181,7 +181,7 @@ router.get("/verify", async (req, res) => {
     if (!user) {
       return res.render("emailnotverified");
     }
-    if (user.isVerified) {
+    if (user.isVerified == true) {
       return res.render("alreadyverified"); 
     }
     user.isVerified = true;
