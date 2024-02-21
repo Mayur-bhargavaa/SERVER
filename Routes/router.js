@@ -176,12 +176,13 @@ router.get("/users", (req, res) => {
 
 router.get("/verify", async (req, res) => {
   const { token } = req.query;
-
   try {
     const user = await User.findOne({ verificationToken: token });
-
     if (!user) {
-      res.render("emailnotverified");
+      return res.render("emailnotverified");
+    }
+    if (user.isVerified) {
+      return res.render("alreadyverified"); 
     }
     user.isVerified = true;
     user.verificationToken = undefined;
@@ -192,7 +193,6 @@ router.get("/verify", async (req, res) => {
     res.render("emailnotverified");
   }
 });
-
 //                                   FOR USER DATA 
 
 
