@@ -1,36 +1,33 @@
 const nodemailer = require("nodemailer");
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config();
+
 async function sendVerificationEmail(userEmail, verificationToken, name) {
+  // Read the HTML file
+  const filePath = path.join(__dirname, 'verificationEmailTemplate.html');
+  let htmlContent = fs.readFileSync(filePath, 'utf8');
+  
+  // Replace placeholders with actual data
+  htmlContent = htmlContent.replace('{{name}}', name).replace('{{verificationToken}}', verificationToken);
+  
+  // Create a transporter as before
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    host: "us2.imap.mailhostbox.com",
+    port: 993,
+    secure: false, // Note: Use true for 465, false for other ports
     requireTLS: true,
-    service: "Gmail",
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
   });
+
   const mailOptions = {
-    from: "mayurbhargava026@gmail.com",
+    from: "info@citsolution.tech", // Change this to your email
     to: userEmail,
-    subject: "CITS Shopping App",
-    html: `<h1>Hi ${name},</h1>
-            <p>You are just a step away from creating your account on CITS Shopping App</p>
-            <p>To veriy the mail please click on the below:-</p>
-           <a style=" display: inline-block;
-           text-decoration: none;
-           color: #f44336;
-           border: 1px solid #f44336;
-           padding: 12px 34px;
-           font-size: 13px;
-           background: transparent;
-           display: flex;
-           justify-content: center;
-           align-item:center;
-           position: relative;
-           cursor: pointer;" href="https://dynamic-cits.onrender.com/verify?token=${verificationToken}"><h>Verify Email</h></a>`,
+    subject: "Welcome to DYNAMIC_CITS — Create and verify your account now.",
+    html: htmlContent, // Use the read and modified HTML content
   };
 
   try {
