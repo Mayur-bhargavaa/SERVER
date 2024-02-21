@@ -13,8 +13,8 @@ async function sendVerificationEmail(userEmail, verificationToken, name) {
   
   // Create a transporter as before
   const transporter = nodemailer.createTransport({
-    host: "us2.imap.mailhostbox.com",
-    port: 993,
+    host: "us2.smtp.mailhostbox.com",
+    port: 587,
     secure: false, // Note: Use true for 465, false for other ports
     requireTLS: true,
     auth: {
