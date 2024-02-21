@@ -9,7 +9,7 @@ async function sendVerificationEmail(userEmail, verificationToken, name) {
   let htmlContent = fs.readFileSync(filePath, 'utf8');
   
   // Replace placeholders with actual data
-  htmlContent = htmlContent.replace('{{name}}', name).replace('{{verificationToken}}', verificationToken);
+  htmlContent = htmlContent.replace('{{name}}', name).replace('{{verificationToken}}', verificationToken).replace('{{$username}}', userEmail)
   
   // Create a transporter as before
   const transporter = nodemailer.createTransport({
